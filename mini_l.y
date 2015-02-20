@@ -2,17 +2,29 @@
 /* calc.y */
 
 %{
+#define YY_NO_INPUT
+using namespace std;
+#include <iostream>
 #include <stdio.h>
-#include <stdlib.h>
-void yyerror(const char *msg);
-extern int currLine;
-extern int currPos;
-FILE * yyin;
+#include <string>
+int yyerror(char *s);
+int yylex(void);
+extern char * yytext;
 %}
 
 /* Bison Declarations */
-%start PROGRAM       
-%token BEGINPROGRAM  
+
+%error-verbose
+
+%union{
+    int int_val;
+    char* string_val;
+}
+
+%start Program
+
+%token <string> PROGRAM
+%token BEGIN_PROGRAM  
 %token ENDPROGRAM    
 %token INTEGER
 %token ARRAY        
@@ -63,10 +75,10 @@ FILE * yyin;
 
 %%
 
-PROGRAM:            PROGRAM IDENT SEMICOLON BLOCK ENDPROGRAM
+Program:            PROGRAM IDENT SEMICOLON BLOCK ENDPROGRAM
                     ;
             
-BLOCK:              declaration SEMICOLON declaration_pm BEGINPROGRAM statement SEMICOLON statement_pm
+BLOCK:              declaration SEMICOLON declaration_pm BEGIN_PROGRAM statement SEMICOLON statement_pm
                     ;
 
 declaration_pm:     /* empty */
@@ -183,3 +195,25 @@ var:                IDENT
                     ;
 
 %%
+
+int yyerror(string s)
+{
+  extern int yylineno;	// defined and maintained in lex.c
+  extern char *yytext;	// defined and maintained in lex.c
+  
+  cerr << "ERROR: " << s << " at symbol \"" << yytext;
+  cerr << "\" on line " << yylineno << endl;
+  exit(1);
+}
+
+int yyerror(char *s)
+{
+  return yyerror(string(s));
+}
+
+int main(int argc, char **argv)
+{
+    yyparse();
+    
+    return 0;
+    

@@ -1,0 +1,1795 @@
+Rules useless in parser due to conflicts
+
+   22 ELSEIF_pm: %empty
+
+
+State 24 conflicts: 1 shift/reduce
+State 25 conflicts: 1 shift/reduce
+State 37 conflicts: 1 shift/reduce
+State 48 conflicts: 2 shift/reduce, 3 reduce/reduce
+State 52 conflicts: 1 shift/reduce
+State 54 conflicts: 1 shift/reduce
+State 98 conflicts: 1 shift/reduce
+State 114 conflicts: 1 shift/reduce
+State 117 conflicts: 1 shift/reduce
+State 119 conflicts: 1 shift/reduce
+State 131 conflicts: 1 shift/reduce
+State 132 conflicts: 1 shift/reduce
+State 133 conflicts: 1 shift/reduce
+State 136 conflicts: 1 shift/reduce
+State 138 conflicts: 9 shift/reduce
+State 143 conflicts: 1 shift/reduce
+State 144 conflicts: 1 shift/reduce
+State 150 conflicts: 1 shift/reduce
+State 151 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: PROGRAM IDENT SEMICOLON BLOCK ENDPROGRAM
+
+    2 BLOCK: declaration SEMICOLON declaration_pm BEGIN_PROGRAM statement SEMICOLON statement_pm
+
+    3 declaration_pm: %empty
+    4               | declaration SEMICOLON
+
+    5 statement_pm: %empty
+    6             | statement SEMICOLON
+
+    7 declaration: IDENT IDENT_pm COLON ARRAY_pm INTEGER
+
+    8 IDENT_pm: %empty
+    9         | COMMA IDENT IDENT_pm
+
+   10 ARRAY_pm: %empty
+   11         | ARRAY L_BRACKET NUMBER R_BRACKET OF
+
+   12 statement: var ASSIGN expression
+   13          | var ASSIGN bool_exp QUESTION expression COLON expression
+   14          | IF bool_exp THEN statement SEMICOLON ELSEIF_pm ELSE_pm statement_pm ENDIF
+   15          | WHILE bool_exp BEGINLOOP statement SEMICOLON statement_pm ENDLOOP
+   16          | DO BEGINLOOP statement SEMICOLON statement_pm ENDLOOP WHILE bool_exp
+   17          | READ var var_pm
+   18          | WRITE var var_pm
+   19          | BREAK
+   20          | CONTINUE
+   21          | EXIT
+
+   22 ELSEIF_pm: %empty
+   23          | ELSEIF bool_exp statement SEMICOLON statement_pm ELSEIF_pm
+   24          | ELSE_pm
+
+   25 ELSE_pm: ELSE statement SEMICOLON statement_pm
+
+   26 var_pm: %empty
+   27       | COMMA var var_pm
+
+   28 bool_exp: relation_and_exp relation_and_exp_pm
+
+   29 relation_and_exp_pm: %empty
+   30                    | OR relation_and_exp relation_and_exp_pm
+
+   31 relation_and_exp: relation_exp relation_exp_pm
+
+   32 relation_exp_pm: %empty
+   33                | AND relation_exp relation_exp_pm
+
+   34 relation_exp: not_pm expression comp expression
+   35             | not_pm TRUE
+   36             | not_pm FALSE
+   37             | L_PAREN bool_exp R_PAREN
+
+   38 not_pm: %empty
+   39       | NOT
+
+   40 comp: EQ
+   41     | NEQ
+   42     | LT
+   43     | GT
+   44     | LTE
+   45     | GTE
+
+   46 expression: multiplicative_exp plus_pm minus_pm
+
+   47 plus_pm: %empty
+   48        | ADD multiplicative_exp plus_pm minus_pm
+
+   49 minus_pm: %empty
+   50         | SUB multiplicative_exp plus_pm minus_pm
+
+   51 multiplicative_exp: term asterisk_pm slash_pm percent_pm
+
+   52 asterisk_pm: %empty
+   53            | MULT term asterisk_pm slash_pm percent_pm
+
+   54 slash_pm: %empty
+   55         | DIV term asterisk_pm slash_pm percent_pm
+
+   56 percent_pm: %empty
+   57           | MOD term asterisk_pm slash_pm percent_pm
+
+   58 term: minus_pm_pm var
+   59     | minus_pm_pm NUMBER
+   60     | minus_pm_pm L_PAREN expression R_PAREN
+
+   61 minus_pm_pm: %empty
+   62            | SUB
+
+   63 var: IDENT
+   64    | IDENT L_BRACKET expression R_BRACKET
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+PROGRAM (258) 1
+BEGIN_PROGRAM (259) 2
+ENDPROGRAM (260) 1
+INTEGER (261) 7
+ARRAY (262) 11
+OF (263) 11
+IF (264) 14
+THEN (265) 14
+ENDIF (266) 14
+ELSE (267) 25
+ELSEIF (268) 23
+WHILE (269) 15 16
+DO (270) 16
+BEGINLOOP (271) 15 16
+ENDLOOP (272) 15 16
+BREAK (273) 19
+CONTINUE (274) 20
+EXIT (275) 21
+READ (276) 17
+WRITE (277) 18
+AND (278) 33
+OR (279) 30
+NOT (280) 39
+TRUE (281) 35
+FALSE (282) 36
+SUB (283) 50 62
+ADD (284) 48
+MULT (285) 53
+DIV (286) 55
+MOD (287) 57
+EQ (288) 40
+NEQ (289) 41
+LT (290) 42
+GT (291) 43
+LTE (292) 44
+GTE (293) 45
+SEMICOLON (294) 1 2 4 6 14 15 16 23 25
+COLON (295) 7 13
+COMMA (296) 9 27
+QUESTION (297) 13
+L_BRACKET (298) 11 64
+R_BRACKET (299) 11 64
+L_PAREN (300) 37 60
+R_PAREN (301) 37 60
+ASSIGN (302) 12 13
+NUMBER (303) 11 59
+IDENT (304) 1 7 9 63 64
+
+
+Nonterminals, with rules where they appear
+
+$accept (50)
+    on left: 0
+Program (51)
+    on left: 1, on right: 0
+BLOCK (52)
+    on left: 2, on right: 1
+declaration_pm (53)
+    on left: 3 4, on right: 2
+statement_pm (54)
+    on left: 5 6, on right: 2 14 15 16 23 25
+declaration (55)
+    on left: 7, on right: 2 4
+IDENT_pm (56)
+    on left: 8 9, on right: 7 9
+ARRAY_pm (57)
+    on left: 10 11, on right: 7
+statement (58)
+    on left: 12 13 14 15 16 17 18 19 20 21, on right: 2 6 14 15 16
+    23 25
+ELSEIF_pm (59)
+    on left: 22 23 24, on right: 14 23
+ELSE_pm (60)
+    on left: 25, on right: 14 24
+var_pm (61)
+    on left: 26 27, on right: 17 18 27
+bool_exp (62)
+    on left: 28, on right: 13 14 15 16 23 37
+relation_and_exp_pm (63)
+    on left: 29 30, on right: 28 30
+relation_and_exp (64)
+    on left: 31, on right: 28 30
+relation_exp_pm (65)
+    on left: 32 33, on right: 31 33
+relation_exp (66)
+    on left: 34 35 36 37, on right: 31 33
+not_pm (67)
+    on left: 38 39, on right: 34 35 36
+comp (68)
+    on left: 40 41 42 43 44 45, on right: 34
+expression (69)
+    on left: 46, on right: 12 13 34 60 64
+plus_pm (70)
+    on left: 47 48, on right: 46 48 50
+minus_pm (71)
+    on left: 49 50, on right: 46 48 50
+multiplicative_exp (72)
+    on left: 51, on right: 46 48 50
+asterisk_pm (73)
+    on left: 52 53, on right: 51 53 55 57
+slash_pm (74)
+    on left: 54 55, on right: 51 53 55 57
+percent_pm (75)
+    on left: 56 57, on right: 51 53 55 57
+term (76)
+    on left: 58 59 60, on right: 51 53 55 57
+minus_pm_pm (77)
+    on left: 61 62, on right: 58 59 60
+var (78)
+    on left: 63 64, on right: 12 13 17 18 27 58
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    PROGRAM  shift, and go to state 1
+
+    Program  go to state 2
+
+
+State 1
+
+    1 Program: PROGRAM . IDENT SEMICOLON BLOCK ENDPROGRAM
+
+    IDENT  shift, and go to state 3
+
+
+State 2
+
+    0 $accept: Program . $end
+
+    $end  shift, and go to state 4
+
+
+State 3
+
+    1 Program: PROGRAM IDENT . SEMICOLON BLOCK ENDPROGRAM
+
+    SEMICOLON  shift, and go to state 5
+
+
+State 4
+
+    0 $accept: Program $end .
+
+    $default  accept
+
+
+State 5
+
+    1 Program: PROGRAM IDENT SEMICOLON . BLOCK ENDPROGRAM
+
+    IDENT  shift, and go to state 6
+
+    BLOCK        go to state 7
+    declaration  go to state 8
+
+
+State 6
+
+    7 declaration: IDENT . IDENT_pm COLON ARRAY_pm INTEGER
+
+    COMMA  shift, and go to state 9
+
+    $default  reduce using rule 8 (IDENT_pm)
+
+    IDENT_pm  go to state 10
+
+
+State 7
+
+    1 Program: PROGRAM IDENT SEMICOLON BLOCK . ENDPROGRAM
+
+    ENDPROGRAM  shift, and go to state 11
+
+
+State 8
+
+    2 BLOCK: declaration . SEMICOLON declaration_pm BEGIN_PROGRAM statement SEMICOLON statement_pm
+
+    SEMICOLON  shift, and go to state 12
+
+
+State 9
+
+    9 IDENT_pm: COMMA . IDENT IDENT_pm
+
+    IDENT  shift, and go to state 13
+
+
+State 10
+
+    7 declaration: IDENT IDENT_pm . COLON ARRAY_pm INTEGER
+
+    COLON  shift, and go to state 14
+
+
+State 11
+
+    1 Program: PROGRAM IDENT SEMICOLON BLOCK ENDPROGRAM .
+
+    $default  reduce using rule 1 (Program)
+
+
+State 12
+
+    2 BLOCK: declaration SEMICOLON . declaration_pm BEGIN_PROGRAM statement SEMICOLON statement_pm
+
+    IDENT  shift, and go to state 6
+
+    $default  reduce using rule 3 (declaration_pm)
+
+    declaration_pm  go to state 15
+    declaration     go to state 16
+
+
+State 13
+
+    9 IDENT_pm: COMMA IDENT . IDENT_pm
+
+    COMMA  shift, and go to state 9
+
+    $default  reduce using rule 8 (IDENT_pm)
+
+    IDENT_pm  go to state 17
+
+
+State 14
+
+    7 declaration: IDENT IDENT_pm COLON . ARRAY_pm INTEGER
+
+    ARRAY  shift, and go to state 18
+
+    $default  reduce using rule 10 (ARRAY_pm)
+
+    ARRAY_pm  go to state 19
+
+
+State 15
+
+    2 BLOCK: declaration SEMICOLON declaration_pm . BEGIN_PROGRAM statement SEMICOLON statement_pm
+
+    BEGIN_PROGRAM  shift, and go to state 20
+
+
+State 16
+
+    4 declaration_pm: declaration . SEMICOLON
+
+    SEMICOLON  shift, and go to state 21
+
+
+State 17
+
+    9 IDENT_pm: COMMA IDENT IDENT_pm .
+
+    $default  reduce using rule 9 (IDENT_pm)
+
+
+State 18
+
+   11 ARRAY_pm: ARRAY . L_BRACKET NUMBER R_BRACKET OF
+
+    L_BRACKET  shift, and go to state 22
+
+
+State 19
+
+    7 declaration: IDENT IDENT_pm COLON ARRAY_pm . INTEGER
+
+    INTEGER  shift, and go to state 23
+
+
+State 20
+
+    2 BLOCK: declaration SEMICOLON declaration_pm BEGIN_PROGRAM . statement SEMICOLON statement_pm
+
+    IF        shift, and go to state 24
+    WHILE     shift, and go to state 25
+    DO        shift, and go to state 26
+    BREAK     shift, and go to state 27
+    CONTINUE  shift, and go to state 28
+    EXIT      shift, and go to state 29
+    READ      shift, and go to state 30
+    WRITE     shift, and go to state 31
+    IDENT     shift, and go to state 32
+
+    statement  go to state 33
+    var        go to state 34
+
+
+State 21
+
+    4 declaration_pm: declaration SEMICOLON .
+
+    $default  reduce using rule 4 (declaration_pm)
+
+
+State 22
+
+   11 ARRAY_pm: ARRAY L_BRACKET . NUMBER R_BRACKET OF
+
+    NUMBER  shift, and go to state 35
+
+
+State 23
+
+    7 declaration: IDENT IDENT_pm COLON ARRAY_pm INTEGER .
+
+    $default  reduce using rule 7 (declaration)
+
+
+State 24
+
+   14 statement: IF . bool_exp THEN statement SEMICOLON ELSEIF_pm ELSE_pm statement_pm ENDIF
+
+    NOT      shift, and go to state 36
+    L_PAREN  shift, and go to state 37
+
+    L_PAREN   [reduce using rule 38 (not_pm)]
+    $default  reduce using rule 38 (not_pm)
+
+    bool_exp          go to state 38
+    relation_and_exp  go to state 39
+    relation_exp      go to state 40
+    not_pm            go to state 41
+
+
+State 25
+
+   15 statement: WHILE . bool_exp BEGINLOOP statement SEMICOLON statement_pm ENDLOOP
+
+    NOT      shift, and go to state 36
+    L_PAREN  shift, and go to state 37
+
+    L_PAREN   [reduce using rule 38 (not_pm)]
+    $default  reduce using rule 38 (not_pm)
+
+    bool_exp          go to state 42
+    relation_and_exp  go to state 39
+    relation_exp      go to state 40
+    not_pm            go to state 41
+
+
+State 26
+
+   16 statement: DO . BEGINLOOP statement SEMICOLON statement_pm ENDLOOP WHILE bool_exp
+
+    BEGINLOOP  shift, and go to state 43
+
+
+State 27
+
+   19 statement: BREAK .
+
+    $default  reduce using rule 19 (statement)
+
+
+State 28
+
+   20 statement: CONTINUE .
+
+    $default  reduce using rule 20 (statement)
+
+
+State 29
+
+   21 statement: EXIT .
+
+    $default  reduce using rule 21 (statement)
+
+
+State 30
+
+   17 statement: READ . var var_pm
+
+    IDENT  shift, and go to state 32
+
+    var  go to state 44
+
+
+State 31
+
+   18 statement: WRITE . var var_pm
+
+    IDENT  shift, and go to state 32
+
+    var  go to state 45
+
+
+State 32
+
+   63 var: IDENT .
+   64    | IDENT . L_BRACKET expression R_BRACKET
+
+    L_BRACKET  shift, and go to state 46
+
+    $default  reduce using rule 63 (var)
+
+
+State 33
+
+    2 BLOCK: declaration SEMICOLON declaration_pm BEGIN_PROGRAM statement . SEMICOLON statement_pm
+
+    SEMICOLON  shift, and go to state 47
+
+
+State 34
+
+   12 statement: var . ASSIGN expression
+   13          | var . ASSIGN bool_exp QUESTION expression COLON expression
+
+    ASSIGN  shift, and go to state 48
+
+
+State 35
+
+   11 ARRAY_pm: ARRAY L_BRACKET NUMBER . R_BRACKET OF
+
+    R_BRACKET  shift, and go to state 49
+
+
+State 36
+
+   39 not_pm: NOT .
+
+    $default  reduce using rule 39 (not_pm)
+
+
+State 37
+
+   37 relation_exp: L_PAREN . bool_exp R_PAREN
+
+    NOT      shift, and go to state 36
+    L_PAREN  shift, and go to state 37
+
+    L_PAREN   [reduce using rule 38 (not_pm)]
+    $default  reduce using rule 38 (not_pm)
+
+    bool_exp          go to state 50
+    relation_and_exp  go to state 39
+    relation_exp      go to state 40
+    not_pm            go to state 41
+
+
+State 38
+
+   14 statement: IF bool_exp . THEN statement SEMICOLON ELSEIF_pm ELSE_pm statement_pm ENDIF
+
+    THEN  shift, and go to state 51
+
+
+State 39
+
+   28 bool_exp: relation_and_exp . relation_and_exp_pm
+
+    OR  shift, and go to state 52
+
+    $default  reduce using rule 29 (relation_and_exp_pm)
+
+    relation_and_exp_pm  go to state 53
+
+
+State 40
+
+   31 relation_and_exp: relation_exp . relation_exp_pm
+
+    AND  shift, and go to state 54
+
+    $default  reduce using rule 32 (relation_exp_pm)
+
+    relation_exp_pm  go to state 55
+
+
+State 41
+
+   34 relation_exp: not_pm . expression comp expression
+   35             | not_pm . TRUE
+   36             | not_pm . FALSE
+
+    TRUE   shift, and go to state 56
+    FALSE  shift, and go to state 57
+    SUB    shift, and go to state 58
+
+    $default  reduce using rule 61 (minus_pm_pm)
+
+    expression          go to state 59
+    multiplicative_exp  go to state 60
+    term                go to state 61
+    minus_pm_pm         go to state 62
+
+
+State 42
+
+   15 statement: WHILE bool_exp . BEGINLOOP statement SEMICOLON statement_pm ENDLOOP
+
+    BEGINLOOP  shift, and go to state 63
+
+
+State 43
+
+   16 statement: DO BEGINLOOP . statement SEMICOLON statement_pm ENDLOOP WHILE bool_exp
+
+    IF        shift, and go to state 24
+    WHILE     shift, and go to state 25
+    DO        shift, and go to state 26
+    BREAK     shift, and go to state 27
+    CONTINUE  shift, and go to state 28
+    EXIT      shift, and go to state 29
+    READ      shift, and go to state 30
+    WRITE     shift, and go to state 31
+    IDENT     shift, and go to state 32
+
+    statement  go to state 64
+    var        go to state 34
+
+
+State 44
+
+   17 statement: READ var . var_pm
+
+    COMMA  shift, and go to state 65
+
+    $default  reduce using rule 26 (var_pm)
+
+    var_pm  go to state 66
+
+
+State 45
+
+   18 statement: WRITE var . var_pm
+
+    COMMA  shift, and go to state 65
+
+    $default  reduce using rule 26 (var_pm)
+
+    var_pm  go to state 67
+
+
+State 46
+
+   64 var: IDENT L_BRACKET . expression R_BRACKET
+
+    SUB  shift, and go to state 58
+
+    $default  reduce using rule 61 (minus_pm_pm)
+
+    expression          go to state 68
+    multiplicative_exp  go to state 60
+    term                go to state 61
+    minus_pm_pm         go to state 62
+
+
+State 47
+
+    2 BLOCK: declaration SEMICOLON declaration_pm BEGIN_PROGRAM statement SEMICOLON . statement_pm
+
+    IF        shift, and go to state 24
+    WHILE     shift, and go to state 25
+    DO        shift, and go to state 26
+    BREAK     shift, and go to state 27
+    CONTINUE  shift, and go to state 28
+    EXIT      shift, and go to state 29
+    READ      shift, and go to state 30
+    WRITE     shift, and go to state 31
+    IDENT     shift, and go to state 32
+
+    $default  reduce using rule 5 (statement_pm)
+
+    statement_pm  go to state 69
+    statement     go to state 70
+    var           go to state 34
+
+
+State 48
+
+   12 statement: var ASSIGN . expression
+   13          | var ASSIGN . bool_exp QUESTION expression COLON expression
+
+    NOT      shift, and go to state 36
+    SUB      shift, and go to state 58
+    L_PAREN  shift, and go to state 37
+
+    SUB       [reduce using rule 38 (not_pm)]
+    L_PAREN   [reduce using rule 38 (not_pm)]
+    L_PAREN   [reduce using rule 61 (minus_pm_pm)]
+    NUMBER    reduce using rule 38 (not_pm)
+    NUMBER    [reduce using rule 61 (minus_pm_pm)]
+    IDENT     reduce using rule 38 (not_pm)
+    IDENT     [reduce using rule 61 (minus_pm_pm)]
+    $default  reduce using rule 38 (not_pm)
+
+    bool_exp            go to state 71
+    relation_and_exp    go to state 39
+    relation_exp        go to state 40
+    not_pm              go to state 41
+    expression          go to state 72
+    multiplicative_exp  go to state 60
+    term                go to state 61
+    minus_pm_pm         go to state 62
+
+
+State 49
+
+   11 ARRAY_pm: ARRAY L_BRACKET NUMBER R_BRACKET . OF
+
+    OF  shift, and go to state 73
+
+
+State 50
+
+   37 relation_exp: L_PAREN bool_exp . R_PAREN
+
+    R_PAREN  shift, and go to state 74
+
+
+State 51
+
+   14 statement: IF bool_exp THEN . statement SEMICOLON ELSEIF_pm ELSE_pm statement_pm ENDIF
+
+    IF        shift, and go to state 24
+    WHILE     shift, and go to state 25
+    DO        shift, and go to state 26
+    BREAK     shift, and go to state 27
+    CONTINUE  shift, and go to state 28
+    EXIT      shift, and go to state 29
+    READ      shift, and go to state 30
+    WRITE     shift, and go to state 31
+    IDENT     shift, and go to state 32
+
+    statement  go to state 75
+    var        go to state 34
+
+
+State 52
+
+   30 relation_and_exp_pm: OR . relation_and_exp relation_and_exp_pm
+
+    NOT      shift, and go to state 36
+    L_PAREN  shift, and go to state 37
+
+    L_PAREN   [reduce using rule 38 (not_pm)]
+    $default  reduce using rule 38 (not_pm)
+
+    relation_and_exp  go to state 76
+    relation_exp      go to state 40
+    not_pm            go to state 41
+
+
+State 53
+
+   28 bool_exp: relation_and_exp relation_and_exp_pm .
+
+    $default  reduce using rule 28 (bool_exp)
+
+
+State 54
+
+   33 relation_exp_pm: AND . relation_exp relation_exp_pm
+
+    NOT      shift, and go to state 36
+    L_PAREN  shift, and go to state 37
+
+    L_PAREN   [reduce using rule 38 (not_pm)]
+    $default  reduce using rule 38 (not_pm)
+
+    relation_exp  go to state 77
+    not_pm        go to state 41
+
+
+State 55
+
+   31 relation_and_exp: relation_exp relation_exp_pm .
+
+    $default  reduce using rule 31 (relation_and_exp)
+
+
+State 56
+
+   35 relation_exp: not_pm TRUE .
+
+    $default  reduce using rule 35 (relation_exp)
+
+
+State 57
+
+   36 relation_exp: not_pm FALSE .
+
+    $default  reduce using rule 36 (relation_exp)
+
+
+State 58
+
+   62 minus_pm_pm: SUB .
+
+    $default  reduce using rule 62 (minus_pm_pm)
+
+
+State 59
+
+   34 relation_exp: not_pm expression . comp expression
+
+    EQ   shift, and go to state 78
+    NEQ  shift, and go to state 79
+    LT   shift, and go to state 80
+    GT   shift, and go to state 81
+    LTE  shift, and go to state 82
+    GTE  shift, and go to state 83
+
+    comp  go to state 84
+
+
+State 60
+
+   46 expression: multiplicative_exp . plus_pm minus_pm
+
+    ADD  shift, and go to state 85
+
+    $default  reduce using rule 47 (plus_pm)
+
+    plus_pm  go to state 86
+
+
+State 61
+
+   51 multiplicative_exp: term . asterisk_pm slash_pm percent_pm
+
+    MULT  shift, and go to state 87
+
+    $default  reduce using rule 52 (asterisk_pm)
+
+    asterisk_pm  go to state 88
+
+
+State 62
+
+   58 term: minus_pm_pm . var
+   59     | minus_pm_pm . NUMBER
+   60     | minus_pm_pm . L_PAREN expression R_PAREN
+
+    L_PAREN  shift, and go to state 89
+    NUMBER   shift, and go to state 90
+    IDENT    shift, and go to state 32
+
+    var  go to state 91
+
+
+State 63
+
+   15 statement: WHILE bool_exp BEGINLOOP . statement SEMICOLON statement_pm ENDLOOP
+
+    IF        shift, and go to state 24
+    WHILE     shift, and go to state 25
+    DO        shift, and go to state 26
+    BREAK     shift, and go to state 27
+    CONTINUE  shift, and go to state 28
+    EXIT      shift, and go to state 29
+    READ      shift, and go to state 30
+    WRITE     shift, and go to state 31
+    IDENT     shift, and go to state 32
+
+    statement  go to state 92
+    var        go to state 34
+
+
+State 64
+
+   16 statement: DO BEGINLOOP statement . SEMICOLON statement_pm ENDLOOP WHILE bool_exp
+
+    SEMICOLON  shift, and go to state 93
+
+
+State 65
+
+   27 var_pm: COMMA . var var_pm
+
+    IDENT  shift, and go to state 32
+
+    var  go to state 94
+
+
+State 66
+
+   17 statement: READ var var_pm .
+
+    $default  reduce using rule 17 (statement)
+
+
+State 67
+
+   18 statement: WRITE var var_pm .
+
+    $default  reduce using rule 18 (statement)
+
+
+State 68
+
+   64 var: IDENT L_BRACKET expression . R_BRACKET
+
+    R_BRACKET  shift, and go to state 95
+
+
+State 69
+
+    2 BLOCK: declaration SEMICOLON declaration_pm BEGIN_PROGRAM statement SEMICOLON statement_pm .
+
+    $default  reduce using rule 2 (BLOCK)
+
+
+State 70
+
+    6 statement_pm: statement . SEMICOLON
+
+    SEMICOLON  shift, and go to state 96
+
+
+State 71
+
+   13 statement: var ASSIGN bool_exp . QUESTION expression COLON expression
+
+    QUESTION  shift, and go to state 97
+
+
+State 72
+
+   12 statement: var ASSIGN expression .
+
+    $default  reduce using rule 12 (statement)
+
+
+State 73
+
+   11 ARRAY_pm: ARRAY L_BRACKET NUMBER R_BRACKET OF .
+
+    $default  reduce using rule 11 (ARRAY_pm)
+
+
+State 74
+
+   37 relation_exp: L_PAREN bool_exp R_PAREN .
+
+    $default  reduce using rule 37 (relation_exp)
+
+
+State 75
+
+   14 statement: IF bool_exp THEN statement . SEMICOLON ELSEIF_pm ELSE_pm statement_pm ENDIF
+
+    SEMICOLON  shift, and go to state 98
+
+
+State 76
+
+   30 relation_and_exp_pm: OR relation_and_exp . relation_and_exp_pm
+
+    OR  shift, and go to state 52
+
+    $default  reduce using rule 29 (relation_and_exp_pm)
+
+    relation_and_exp_pm  go to state 99
+
+
+State 77
+
+   33 relation_exp_pm: AND relation_exp . relation_exp_pm
+
+    AND  shift, and go to state 54
+
+    $default  reduce using rule 32 (relation_exp_pm)
+
+    relation_exp_pm  go to state 100
+
+
+State 78
+
+   40 comp: EQ .
+
+    $default  reduce using rule 40 (comp)
+
+
+State 79
+
+   41 comp: NEQ .
+
+    $default  reduce using rule 41 (comp)
+
+
+State 80
+
+   42 comp: LT .
+
+    $default  reduce using rule 42 (comp)
+
+
+State 81
+
+   43 comp: GT .
+
+    $default  reduce using rule 43 (comp)
+
+
+State 82
+
+   44 comp: LTE .
+
+    $default  reduce using rule 44 (comp)
+
+
+State 83
+
+   45 comp: GTE .
+
+    $default  reduce using rule 45 (comp)
+
+
+State 84
+
+   34 relation_exp: not_pm expression comp . expression
+
+    SUB  shift, and go to state 58
+
+    $default  reduce using rule 61 (minus_pm_pm)
+
+    expression          go to state 101
+    multiplicative_exp  go to state 60
+    term                go to state 61
+    minus_pm_pm         go to state 62
+
+
+State 85
+
+   48 plus_pm: ADD . multiplicative_exp plus_pm minus_pm
+
+    SUB  shift, and go to state 58
+
+    $default  reduce using rule 61 (minus_pm_pm)
+
+    multiplicative_exp  go to state 102
+    term                go to state 61
+    minus_pm_pm         go to state 62
+
+
+State 86
+
+   46 expression: multiplicative_exp plus_pm . minus_pm
+
+    SUB  shift, and go to state 103
+
+    $default  reduce using rule 49 (minus_pm)
+
+    minus_pm  go to state 104
+
+
+State 87
+
+   53 asterisk_pm: MULT . term asterisk_pm slash_pm percent_pm
+
+    SUB  shift, and go to state 58
+
+    $default  reduce using rule 61 (minus_pm_pm)
+
+    term         go to state 105
+    minus_pm_pm  go to state 62
+
+
+State 88
+
+   51 multiplicative_exp: term asterisk_pm . slash_pm percent_pm
+
+    DIV  shift, and go to state 106
+
+    $default  reduce using rule 54 (slash_pm)
+
+    slash_pm  go to state 107
+
+
+State 89
+
+   60 term: minus_pm_pm L_PAREN . expression R_PAREN
+
+    SUB  shift, and go to state 58
+
+    $default  reduce using rule 61 (minus_pm_pm)
+
+    expression          go to state 108
+    multiplicative_exp  go to state 60
+    term                go to state 61
+    minus_pm_pm         go to state 62
+
+
+State 90
+
+   59 term: minus_pm_pm NUMBER .
+
+    $default  reduce using rule 59 (term)
+
+
+State 91
+
+   58 term: minus_pm_pm var .
+
+    $default  reduce using rule 58 (term)
+
+
+State 92
+
+   15 statement: WHILE bool_exp BEGINLOOP statement . SEMICOLON statement_pm ENDLOOP
+
+    SEMICOLON  shift, and go to state 109
+
+
+State 93
+
+   16 statement: DO BEGINLOOP statement SEMICOLON . statement_pm ENDLOOP WHILE bool_exp
+
+    IF        shift, and go to state 24
+    WHILE     shift, and go to state 25
+    DO        shift, and go to state 26
+    BREAK     shift, and go to state 27
+    CONTINUE  shift, and go to state 28
+    EXIT      shift, and go to state 29
+    READ      shift, and go to state 30
+    WRITE     shift, and go to state 31
+    IDENT     shift, and go to state 32
+
+    $default  reduce using rule 5 (statement_pm)
+
+    statement_pm  go to state 110
+    statement     go to state 70
+    var           go to state 34
+
+
+State 94
+
+   27 var_pm: COMMA var . var_pm
+
+    COMMA  shift, and go to state 65
+
+    $default  reduce using rule 26 (var_pm)
+
+    var_pm  go to state 111
+
+
+State 95
+
+   64 var: IDENT L_BRACKET expression R_BRACKET .
+
+    $default  reduce using rule 64 (var)
+
+
+State 96
+
+    6 statement_pm: statement SEMICOLON .
+
+    $default  reduce using rule 6 (statement_pm)
+
+
+State 97
+
+   13 statement: var ASSIGN bool_exp QUESTION . expression COLON expression
+
+    SUB  shift, and go to state 58
+
+    $default  reduce using rule 61 (minus_pm_pm)
+
+    expression          go to state 112
+    multiplicative_exp  go to state 60
+    term                go to state 61
+    minus_pm_pm         go to state 62
+
+
+State 98
+
+   14 statement: IF bool_exp THEN statement SEMICOLON . ELSEIF_pm ELSE_pm statement_pm ENDIF
+
+    ELSE    shift, and go to state 113
+    ELSEIF  shift, and go to state 114
+
+    ELSE  [reduce using rule 22 (ELSEIF_pm)]
+
+    ELSEIF_pm  go to state 115
+    ELSE_pm    go to state 116
+
+
+State 99
+
+   30 relation_and_exp_pm: OR relation_and_exp relation_and_exp_pm .
+
+    $default  reduce using rule 30 (relation_and_exp_pm)
+
+
+State 100
+
+   33 relation_exp_pm: AND relation_exp relation_exp_pm .
+
+    $default  reduce using rule 33 (relation_exp_pm)
+
+
+State 101
+
+   34 relation_exp: not_pm expression comp expression .
+
+    $default  reduce using rule 34 (relation_exp)
+
+
+State 102
+
+   48 plus_pm: ADD multiplicative_exp . plus_pm minus_pm
+
+    ADD  shift, and go to state 85
+
+    $default  reduce using rule 47 (plus_pm)
+
+    plus_pm  go to state 117
+
+
+State 103
+
+   50 minus_pm: SUB . multiplicative_exp plus_pm minus_pm
+
+    SUB  shift, and go to state 58
+
+    $default  reduce using rule 61 (minus_pm_pm)
+
+    multiplicative_exp  go to state 118
+    term                go to state 61
+    minus_pm_pm         go to state 62
+
+
+State 104
+
+   46 expression: multiplicative_exp plus_pm minus_pm .
+
+    $default  reduce using rule 46 (expression)
+
+
+State 105
+
+   53 asterisk_pm: MULT term . asterisk_pm slash_pm percent_pm
+
+    MULT  shift, and go to state 87
+
+    $default  reduce using rule 52 (asterisk_pm)
+
+    asterisk_pm  go to state 119
+
+
+State 106
+
+   55 slash_pm: DIV . term asterisk_pm slash_pm percent_pm
+
+    SUB  shift, and go to state 58
+
+    $default  reduce using rule 61 (minus_pm_pm)
+
+    term         go to state 120
+    minus_pm_pm  go to state 62
+
+
+State 107
+
+   51 multiplicative_exp: term asterisk_pm slash_pm . percent_pm
+
+    MOD  shift, and go to state 121
+
+    $default  reduce using rule 56 (percent_pm)
+
+    percent_pm  go to state 122
+
+
+State 108
+
+   60 term: minus_pm_pm L_PAREN expression . R_PAREN
+
+    R_PAREN  shift, and go to state 123
+
+
+State 109
+
+   15 statement: WHILE bool_exp BEGINLOOP statement SEMICOLON . statement_pm ENDLOOP
+
+    IF        shift, and go to state 24
+    WHILE     shift, and go to state 25
+    DO        shift, and go to state 26
+    BREAK     shift, and go to state 27
+    CONTINUE  shift, and go to state 28
+    EXIT      shift, and go to state 29
+    READ      shift, and go to state 30
+    WRITE     shift, and go to state 31
+    IDENT     shift, and go to state 32
+
+    $default  reduce using rule 5 (statement_pm)
+
+    statement_pm  go to state 124
+    statement     go to state 70
+    var           go to state 34
+
+
+State 110
+
+   16 statement: DO BEGINLOOP statement SEMICOLON statement_pm . ENDLOOP WHILE bool_exp
+
+    ENDLOOP  shift, and go to state 125
+
+
+State 111
+
+   27 var_pm: COMMA var var_pm .
+
+    $default  reduce using rule 27 (var_pm)
+
+
+State 112
+
+   13 statement: var ASSIGN bool_exp QUESTION expression . COLON expression
+
+    COLON  shift, and go to state 126
+
+
+State 113
+
+   25 ELSE_pm: ELSE . statement SEMICOLON statement_pm
+
+    IF        shift, and go to state 24
+    WHILE     shift, and go to state 25
+    DO        shift, and go to state 26
+    BREAK     shift, and go to state 27
+    CONTINUE  shift, and go to state 28
+    EXIT      shift, and go to state 29
+    READ      shift, and go to state 30
+    WRITE     shift, and go to state 31
+    IDENT     shift, and go to state 32
+
+    statement  go to state 127
+    var        go to state 34
+
+
+State 114
+
+   23 ELSEIF_pm: ELSEIF . bool_exp statement SEMICOLON statement_pm ELSEIF_pm
+
+    NOT      shift, and go to state 36
+    L_PAREN  shift, and go to state 37
+
+    L_PAREN   [reduce using rule 38 (not_pm)]
+    $default  reduce using rule 38 (not_pm)
+
+    bool_exp          go to state 128
+    relation_and_exp  go to state 39
+    relation_exp      go to state 40
+    not_pm            go to state 41
+
+
+State 115
+
+   14 statement: IF bool_exp THEN statement SEMICOLON ELSEIF_pm . ELSE_pm statement_pm ENDIF
+
+    ELSE  shift, and go to state 113
+
+    ELSE_pm  go to state 129
+
+
+State 116
+
+   24 ELSEIF_pm: ELSE_pm .
+
+    $default  reduce using rule 24 (ELSEIF_pm)
+
+
+State 117
+
+   48 plus_pm: ADD multiplicative_exp plus_pm . minus_pm
+
+    SUB  shift, and go to state 103
+
+    SUB       [reduce using rule 49 (minus_pm)]
+    $default  reduce using rule 49 (minus_pm)
+
+    minus_pm  go to state 130
+
+
+State 118
+
+   50 minus_pm: SUB multiplicative_exp . plus_pm minus_pm
+
+    ADD  shift, and go to state 85
+
+    $default  reduce using rule 47 (plus_pm)
+
+    plus_pm  go to state 131
+
+
+State 119
+
+   53 asterisk_pm: MULT term asterisk_pm . slash_pm percent_pm
+
+    DIV  shift, and go to state 106
+
+    DIV       [reduce using rule 54 (slash_pm)]
+    $default  reduce using rule 54 (slash_pm)
+
+    slash_pm  go to state 132
+
+
+State 120
+
+   55 slash_pm: DIV term . asterisk_pm slash_pm percent_pm
+
+    MULT  shift, and go to state 87
+
+    $default  reduce using rule 52 (asterisk_pm)
+
+    asterisk_pm  go to state 133
+
+
+State 121
+
+   57 percent_pm: MOD . term asterisk_pm slash_pm percent_pm
+
+    SUB  shift, and go to state 58
+
+    $default  reduce using rule 61 (minus_pm_pm)
+
+    term         go to state 134
+    minus_pm_pm  go to state 62
+
+
+State 122
+
+   51 multiplicative_exp: term asterisk_pm slash_pm percent_pm .
+
+    $default  reduce using rule 51 (multiplicative_exp)
+
+
+State 123
+
+   60 term: minus_pm_pm L_PAREN expression R_PAREN .
+
+    $default  reduce using rule 60 (term)
+
+
+State 124
+
+   15 statement: WHILE bool_exp BEGINLOOP statement SEMICOLON statement_pm . ENDLOOP
+
+    ENDLOOP  shift, and go to state 135
+
+
+State 125
+
+   16 statement: DO BEGINLOOP statement SEMICOLON statement_pm ENDLOOP . WHILE bool_exp
+
+    WHILE  shift, and go to state 136
+
+
+State 126
+
+   13 statement: var ASSIGN bool_exp QUESTION expression COLON . expression
+
+    SUB  shift, and go to state 58
+
+    $default  reduce using rule 61 (minus_pm_pm)
+
+    expression          go to state 137
+    multiplicative_exp  go to state 60
+    term                go to state 61
+    minus_pm_pm         go to state 62
+
+
+State 127
+
+   25 ELSE_pm: ELSE statement . SEMICOLON statement_pm
+
+    SEMICOLON  shift, and go to state 138
+
+
+State 128
+
+   23 ELSEIF_pm: ELSEIF bool_exp . statement SEMICOLON statement_pm ELSEIF_pm
+
+    IF        shift, and go to state 24
+    WHILE     shift, and go to state 25
+    DO        shift, and go to state 26
+    BREAK     shift, and go to state 27
+    CONTINUE  shift, and go to state 28
+    EXIT      shift, and go to state 29
+    READ      shift, and go to state 30
+    WRITE     shift, and go to state 31
+    IDENT     shift, and go to state 32
+
+    statement  go to state 139
+    var        go to state 34
+
+
+State 129
+
+   14 statement: IF bool_exp THEN statement SEMICOLON ELSEIF_pm ELSE_pm . statement_pm ENDIF
+
+    IF        shift, and go to state 24
+    WHILE     shift, and go to state 25
+    DO        shift, and go to state 26
+    BREAK     shift, and go to state 27
+    CONTINUE  shift, and go to state 28
+    EXIT      shift, and go to state 29
+    READ      shift, and go to state 30
+    WRITE     shift, and go to state 31
+    IDENT     shift, and go to state 32
+
+    $default  reduce using rule 5 (statement_pm)
+
+    statement_pm  go to state 140
+    statement     go to state 70
+    var           go to state 34
+
+
+State 130
+
+   48 plus_pm: ADD multiplicative_exp plus_pm minus_pm .
+
+    $default  reduce using rule 48 (plus_pm)
+
+
+State 131
+
+   50 minus_pm: SUB multiplicative_exp plus_pm . minus_pm
+
+    SUB  shift, and go to state 103
+
+    SUB       [reduce using rule 49 (minus_pm)]
+    $default  reduce using rule 49 (minus_pm)
+
+    minus_pm  go to state 141
+
+
+State 132
+
+   53 asterisk_pm: MULT term asterisk_pm slash_pm . percent_pm
+
+    MOD  shift, and go to state 121
+
+    MOD       [reduce using rule 56 (percent_pm)]
+    $default  reduce using rule 56 (percent_pm)
+
+    percent_pm  go to state 142
+
+
+State 133
+
+   55 slash_pm: DIV term asterisk_pm . slash_pm percent_pm
+
+    DIV  shift, and go to state 106
+
+    DIV       [reduce using rule 54 (slash_pm)]
+    $default  reduce using rule 54 (slash_pm)
+
+    slash_pm  go to state 143
+
+
+State 134
+
+   57 percent_pm: MOD term . asterisk_pm slash_pm percent_pm
+
+    MULT  shift, and go to state 87
+
+    $default  reduce using rule 52 (asterisk_pm)
+
+    asterisk_pm  go to state 144
+
+
+State 135
+
+   15 statement: WHILE bool_exp BEGINLOOP statement SEMICOLON statement_pm ENDLOOP .
+
+    $default  reduce using rule 15 (statement)
+
+
+State 136
+
+   16 statement: DO BEGINLOOP statement SEMICOLON statement_pm ENDLOOP WHILE . bool_exp
+
+    NOT      shift, and go to state 36
+    L_PAREN  shift, and go to state 37
+
+    L_PAREN   [reduce using rule 38 (not_pm)]
+    $default  reduce using rule 38 (not_pm)
+
+    bool_exp          go to state 145
+    relation_and_exp  go to state 39
+    relation_exp      go to state 40
+    not_pm            go to state 41
+
+
+State 137
+
+   13 statement: var ASSIGN bool_exp QUESTION expression COLON expression .
+
+    $default  reduce using rule 13 (statement)
+
+
+State 138
+
+   25 ELSE_pm: ELSE statement SEMICOLON . statement_pm
+
+    IF        shift, and go to state 24
+    WHILE     shift, and go to state 25
+    DO        shift, and go to state 26
+    BREAK     shift, and go to state 27
+    CONTINUE  shift, and go to state 28
+    EXIT      shift, and go to state 29
+    READ      shift, and go to state 30
+    WRITE     shift, and go to state 31
+    IDENT     shift, and go to state 32
+
+    IF        [reduce using rule 5 (statement_pm)]
+    WHILE     [reduce using rule 5 (statement_pm)]
+    DO        [reduce using rule 5 (statement_pm)]
+    BREAK     [reduce using rule 5 (statement_pm)]
+    CONTINUE  [reduce using rule 5 (statement_pm)]
+    EXIT      [reduce using rule 5 (statement_pm)]
+    READ      [reduce using rule 5 (statement_pm)]
+    WRITE     [reduce using rule 5 (statement_pm)]
+    IDENT     [reduce using rule 5 (statement_pm)]
+    $default  reduce using rule 5 (statement_pm)
+
+    statement_pm  go to state 146
+    statement     go to state 70
+    var           go to state 34
+
+
+State 139
+
+   23 ELSEIF_pm: ELSEIF bool_exp statement . SEMICOLON statement_pm ELSEIF_pm
+
+    SEMICOLON  shift, and go to state 147
+
+
+State 140
+
+   14 statement: IF bool_exp THEN statement SEMICOLON ELSEIF_pm ELSE_pm statement_pm . ENDIF
+
+    ENDIF  shift, and go to state 148
+
+
+State 141
+
+   50 minus_pm: SUB multiplicative_exp plus_pm minus_pm .
+
+    $default  reduce using rule 50 (minus_pm)
+
+
+State 142
+
+   53 asterisk_pm: MULT term asterisk_pm slash_pm percent_pm .
+
+    $default  reduce using rule 53 (asterisk_pm)
+
+
+State 143
+
+   55 slash_pm: DIV term asterisk_pm slash_pm . percent_pm
+
+    MOD  shift, and go to state 121
+
+    MOD       [reduce using rule 56 (percent_pm)]
+    $default  reduce using rule 56 (percent_pm)
+
+    percent_pm  go to state 149
+
+
+State 144
+
+   57 percent_pm: MOD term asterisk_pm . slash_pm percent_pm
+
+    DIV  shift, and go to state 106
+
+    DIV       [reduce using rule 54 (slash_pm)]
+    $default  reduce using rule 54 (slash_pm)
+
+    slash_pm  go to state 150
+
+
+State 145
+
+   16 statement: DO BEGINLOOP statement SEMICOLON statement_pm ENDLOOP WHILE bool_exp .
+
+    $default  reduce using rule 16 (statement)
+
+
+State 146
+
+   25 ELSE_pm: ELSE statement SEMICOLON statement_pm .
+
+    $default  reduce using rule 25 (ELSE_pm)
+
+
+State 147
+
+   23 ELSEIF_pm: ELSEIF bool_exp statement SEMICOLON . statement_pm ELSEIF_pm
+
+    IF        shift, and go to state 24
+    WHILE     shift, and go to state 25
+    DO        shift, and go to state 26
+    BREAK     shift, and go to state 27
+    CONTINUE  shift, and go to state 28
+    EXIT      shift, and go to state 29
+    READ      shift, and go to state 30
+    WRITE     shift, and go to state 31
+    IDENT     shift, and go to state 32
+
+    $default  reduce using rule 5 (statement_pm)
+
+    statement_pm  go to state 151
+    statement     go to state 70
+    var           go to state 34
+
+
+State 148
+
+   14 statement: IF bool_exp THEN statement SEMICOLON ELSEIF_pm ELSE_pm statement_pm ENDIF .
+
+    $default  reduce using rule 14 (statement)
+
+
+State 149
+
+   55 slash_pm: DIV term asterisk_pm slash_pm percent_pm .
+
+    $default  reduce using rule 55 (slash_pm)
+
+
+State 150
+
+   57 percent_pm: MOD term asterisk_pm slash_pm . percent_pm
+
+    MOD  shift, and go to state 121
+
+    MOD       [reduce using rule 56 (percent_pm)]
+    $default  reduce using rule 56 (percent_pm)
+
+    percent_pm  go to state 152
+
+
+State 151
+
+   23 ELSEIF_pm: ELSEIF bool_exp statement SEMICOLON statement_pm . ELSEIF_pm
+
+    ELSE    shift, and go to state 113
+    ELSEIF  shift, and go to state 114
+
+    ELSE  [reduce using rule 22 (ELSEIF_pm)]
+
+    ELSEIF_pm  go to state 153
+    ELSE_pm    go to state 116
+
+
+State 152
+
+   57 percent_pm: MOD term asterisk_pm slash_pm percent_pm .
+
+    $default  reduce using rule 57 (percent_pm)
+
+
+State 153
+
+   23 ELSEIF_pm: ELSEIF bool_exp statement SEMICOLON statement_pm ELSEIF_pm .
+
+    $default  reduce using rule 23 (ELSEIF_pm)
