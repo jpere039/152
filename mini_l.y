@@ -5,11 +5,15 @@
 C Declarations
 %}
 
-/*Bison Declarations */
+/* Bison Declarations */
+%token program identifier
+%type  <int_val> num
+%type  <string_val> id
+
 
 %%
 
-program:            program identifier ';' block endprogram
+program:            program id ';' block endprogram
                     ;
             
 block:              declaration ';' declaration_pm beginprogram statement ';' statement_pm
