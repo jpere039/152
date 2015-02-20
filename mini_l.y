@@ -33,7 +33,7 @@ C Declarations
        NOT           
        TRUE          
        FALSE  
-       /* A change */
+
      
 %type  <int_val> num
 %type  <string_val> id
