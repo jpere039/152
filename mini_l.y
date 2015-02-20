@@ -6,14 +6,41 @@ C Declarations
 %}
 
 /* Bison Declarations */
-%token program identifier
+%token PROGRAM       
+       BEGINPROGRAM  
+       ENDPROGRAM    
+       INTEGER
+       IDENT
+       NUMBER
+       ARRAY        
+       OF           
+       IF            
+       THEN           
+       ENDIF        
+       ELSE          
+       ELSEIF        
+       WHILE         
+       DO           
+       BEGINLOOP     
+       ENDLOOP       
+       BREAK         
+       CONTINUE      
+       EXIT          
+       READ          
+       WRITE          
+       AND           
+       OR            
+       NOT           
+       TRUE          
+       FALSE  
+     
 %type  <int_val> num
 %type  <string_val> id
 
 
 %%
 
-program:            program id ';' block endprogram
+PROGRAM:            PROGRAM id ';' block endprogram
                     ;
             
 block:              declaration ';' declaration_pm beginprogram statement ';' statement_pm
