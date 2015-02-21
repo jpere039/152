@@ -1,1 +1,1 @@
-This is the Project for CS152 Compilers. First commit was mid Phase 2.
+This is the project for CS152 Compilers. First commit was mid Phase 2.
